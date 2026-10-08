@@ -1,10 +1,11 @@
 import unittest
-from app import app
+from app import app, init_db
 
 
 class FeedbackAppTest(unittest.TestCase):
 
     def setUp(self):
+        init_db()
         self.app = app.test_client()
         self.app.testing = True
 
