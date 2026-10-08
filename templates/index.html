@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Feedback Portal</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Student Feedback Portal</h1>
+
+        <p class="subtitle">
+            Share your experience and help us improve your learning experience.
+        </p>
+
+        <form id="feedbackForm">
+
+            <!-- Student Name -->
+            <div class="form-group">
+                <label for="name">Student Name</label>
+                <input type="text" id="name" placeholder="Enter your name" required>
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" placeholder="Enter your email" required>
+            </div>
+
+            <!-- Course -->
+            <div class="form-group">
+                <label for="course">Course</label>
+                <input type="text" id="course" placeholder="e.g. BTech CSE" required>
+            </div>
+
+            <!-- Semester -->
+            <div class="form-group">
+                <label for="semester">Semester</label>
+
+                <select id="semester" required>
+                    <option value="">Select Semester</option>
+                    <option value="1st Semester">1st Semester</option>
+                    <option value="2nd Semester">2nd Semester</option>
+                    <option value="3rd Semester">3rd Semester</option>
+                    <option value="4th Semester">4th Semester</option>
+                    <option value="5th Semester">5th Semester</option>
+                    <option value="6th Semester">6th Semester</option>
+                    <option value="7th Semester">7th Semester</option>
+                    <option value="8th Semester">8th Semester</option>
+                </select>
+            </div>
+
+            <!-- Subject -->
+            <div class="form-group">
+                <label for="subject">Subject</label>
+                <input type="text" id="subject" placeholder="Enter subject name" required>
+            </div>
+
+            <!-- Faculty -->
+            <div class="form-group">
+                <label for="faculty">Faculty Name</label>
+                <input type="text" id="faculty" placeholder="Enter faculty name" required>
+            </div>
+
+            <!-- Overall Rating -->
+            <div class="form-group">
+                <label for="overall_rating">Overall Rating</label>
+
+                <select id="overall_rating" required>
+                    <option value="">Select Rating</option>
+                    <option value="5">⭐⭐⭐⭐⭐ Excellent</option>
+                    <option value="4">⭐⭐⭐⭐ Very Good</option>
+                    <option value="3">⭐⭐⭐ Good</option>
+                    <option value="2">⭐⭐ Fair</option>
+                    <option value="1">⭐ Poor</option>
+                </select>
+            </div>
+
+            <!-- Teaching Quality -->
+            <div class="form-group">
+                <label for="teaching_quality">Teaching Quality</label>
+
+                <select id="teaching_quality" required>
+                    <option value="">Select Rating</option>
+                    <option value="5">⭐⭐⭐⭐⭐ Excellent</option>
+                    <option value="4">⭐⭐⭐⭐ Very Good</option>
+                    <option value="3">⭐⭐⭐ Good</option>
+                    <option value="2">⭐⭐ Fair</option>
+                    <option value="1">⭐ Poor</option>
+                </select>
+            </div>
+
+            <!-- Course Content -->
+            <div class="form-group">
+                <label for="course_content">Course Content</label>
+
+                <select id="course_content" required>
+                    <option value="">Select Rating</option>
+                    <option value="5">⭐⭐⭐⭐⭐ Excellent</option>
+                    <option value="4">⭐⭐⭐⭐ Very Good</option>
+                    <option value="3">⭐⭐⭐ Good</option>
+                    <option value="2">⭐⭐ Fair</option>
+                    <option value="1">⭐ Poor</option>
+                </select>
+            </div>
+
+            <!-- Feedback -->
+            <div class="form-group">
+                <label for="feedback">Your Feedback</label>
+
+                <textarea
+                    id="feedback"
+                    placeholder="Tell us about your learning experience..."
+                    required
+                ></textarea>
+            </div>
+
+            <button type="submit">
+                Submit Feedback
+            </button>
+
+        </form>
+
+        <p id="result"></p>
+
+    </div>
+
+
+    <script>
+
+        document.getElementById("feedbackForm").addEventListener("submit", async function(event) {
+
+            event.preventDefault();
+
+            const name = document.getElementById("name").value;
+            const email = document.getElementById("email").value;
+            const course = document.getElementById("course").value;
+            const semester = document.getElementById("semester").value;
+            const subject = document.getElementById("subject").value;
+            const faculty = document.getElementById("faculty").value;
+
+            const overall_rating =
+                document.getElementById("overall_rating").value;
+
+            const teaching_quality =
+                document.getElementById("teaching_quality").value;
+
+            const course_content =
+                document.getElementById("course_content").value;
+
+            const feedback =
+                document.getElementById("feedback").value;
+
+
+            const response = await fetch("/submit", {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+
+                    name: name,
+                    email: email,
+                    course: course,
+                    semester: semester,
+                    subject: subject,
+                    faculty: faculty,
+                    overall_rating: overall_rating,
+                    teaching_quality: teaching_quality,
+                    course_content: course_content,
+                    feedback: feedback
+
+                })
+
+            });
+
+
+            const data = await response.json();
+
+
+            document.getElementById("result").innerText =
+                "Feedback submitted successfully! Sentiment: "
+                + data.sentiment;
+
+
+            document.getElementById("feedbackForm").reset();
+
+        });
+
+    </script>
+
+</body>
+
+</html>
